@@ -1,5 +1,7 @@
 import { makeMap } from './makeMap'
+// dom 属性相关
 
+// 客户端需要特殊处理的几个和 dom properties 不一致的 attributes
 /**
  * On the client we only need to offer special cases for boolean attributes that
  * have different names from their corresponding dom properties:
@@ -23,7 +25,7 @@ export const isBooleanAttr = /*#__PURE__*/ makeMap(
     `loop,open,required,reversed,scoped,seamless,` +
     `checked,muted,multiple,selected`
 )
-
+// 不安全的属性名 \t \n \f \s tab 换行 下一页 空格
 const unsafeAttrCharRE = /[>/="'\u0009\u000a\u000c\u0020]/
 const attrValidationCache: Record<string, boolean> = {}
 
@@ -45,6 +47,7 @@ export const propsToAttrMap: Record<string, string | undefined> = {
   httpEquiv: 'http-equiv'
 }
 
+// 接受数字,无需单位的 css 属性
 /**
  * CSS properties that accept plain numbers
  */
