@@ -1,5 +1,5 @@
 import { isArray, isDate, isObject } from './'
-
+// 数组是否相等
 function looseCompareArrays(a: any[], b: any[]) {
   if (a.length !== b.length) return false
   let equal = true
@@ -8,7 +8,7 @@ function looseCompareArrays(a: any[], b: any[]) {
   }
   return equal
 }
-
+// 判断 a b 所有属性值是否相等
 export function looseEqual(a: any, b: any): boolean {
   if (a === b) return true
   let aValidType = isDate(a)
@@ -24,6 +24,7 @@ export function looseEqual(a: any, b: any): boolean {
   aValidType = isObject(a)
   bValidType = isObject(b)
   if (aValidType || bValidType) {
+    // a,b 一个是对象,一个不是对象,直接返回 false
     /* istanbul ignore if: this if will probably never be called */
     if (!aValidType || !bValidType) {
       return false
@@ -47,7 +48,8 @@ export function looseEqual(a: any, b: any): boolean {
   }
   return String(a) === String(b)
 }
-
+// 只要值相等,就返回
+// 不必严格相等
 export function looseIndexOf(arr: any[], val: any): number {
   return arr.findIndex(item => looseEqual(item, val))
 }
