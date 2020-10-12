@@ -43,7 +43,7 @@ export const isOn = (key: string) => onRE.test(key)
 export const isModelListener = (key: string) => key.startsWith('onUpdate:')
 
 export const extend = Object.assign
-
+// 从数组中移除一个元素
 export const remove = <T>(arr: T[], el: T) => {
   const i = arr.indexOf(el)
   if (i > -1) {
@@ -56,6 +56,11 @@ export const hasOwn = (
   val: object,
   key: string | symbol
 ): key is keyof typeof val => hasOwnProperty.call(val, key)
+//  各种类型判断
+// unknown 与 any 的区别:https://zhuanlan.zhihu.com/p/104296850
+// 使用 unknown 的时候,需要使用类型断言或者使用类型收缩缩小范围
+// let dog:unknown = '';
+// dog.say(); // Object is of type 'unknown'
 
 export const isArray = Array.isArray
 export const isMap = (val: unknown): val is Map<any, any> =>
@@ -98,8 +103,12 @@ export const isReservedProp = /*#__PURE__*/ makeMap(
     'onVnodeBeforeUpdate,onVnodeUpdated,' +
     'onVnodeBeforeUnmount,onVnodeUnmounted'
 )
-
+// 缓存函数计算
+// type Record<K extends keyof any, T> = {
+//   [P in K]: T;
+// };
 const cacheStringFunction = <T extends (str: string) => string>(fn: T): T => {
+  // 键值都是字符串的对象
   const cache: Record<string, string> = Object.create(null)
   return ((str: string) => {
     const hit = cache[str]
@@ -136,10 +145,11 @@ export const capitalize = cacheStringFunction(
   }
 )
 
-// compare whether a value has changed, accounting for NaN.
+// 比较值是否相等,主要为了解决 NaN 的问题
 export const hasChanged = (value: any, oldValue: any): boolean =>
   value !== oldValue && (value === value || oldValue === oldValue)
 
+// 依次调用数组中的函数
 export const invokeArrayFns = (fns: Function[], arg?: any) => {
   for (let i = 0; i < fns.length; i++) {
     fns[i](arg)
