@@ -1,3 +1,4 @@
+// 不同组件/元素的标志符号
 export const enum ShapeFlags {
   ELEMENT = 1,
   FUNCTIONAL_COMPONENT = 1 << 1,
