@@ -2,6 +2,7 @@
 // must be extracted in shared to avoid creating a dependency between the two.
 import { makeMap } from './makeMap'
 
+// 定义 html 标签 svg 标签空标签
 // https://developer.mozilla.org/en-US/docs/Web/HTML/Element
 const HTML_TAGS =
   'html,body,base,head,link,meta,style,title,address,article,aside,footer,' +

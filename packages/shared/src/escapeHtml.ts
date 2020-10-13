@@ -1,5 +1,5 @@
 const escapeRE = /["'&<>]/
-
+// 转义符号 "'&<>
 export function escapeHtml(string: unknown) {
   const str = '' + string
   const match = escapeRE.exec(str)

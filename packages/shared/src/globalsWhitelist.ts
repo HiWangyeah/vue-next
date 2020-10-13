@@ -1,5 +1,5 @@
 import { makeMap } from './makeMap'
-
+// 全局可调用的对象或属性白名单
 const GLOBALS_WHITE_LISTED =
   'Infinity,undefined,NaN,isFinite,isNaN,parseFloat,parseInt,decodeURI,' +
   'decodeURIComponent,encodeURI,encodeURIComponent,Math,Number,Date,Array,' +

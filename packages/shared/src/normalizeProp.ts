@@ -3,6 +3,7 @@ import { isNoUnitNumericStyleProp } from './domAttrConfig'
 
 export type NormalizedStyle = Record<string, string | number>
 
+// 如果是数组形式的数据,转化为对象形式
 export function normalizeStyle(value: unknown): NormalizedStyle | undefined {
   if (isArray(value)) {
     const res: Record<string, string | number> = {}
@@ -25,7 +26,7 @@ export function normalizeStyle(value: unknown): NormalizedStyle | undefined {
 
 const listDelimiterRE = /;(?![^(]*\))/g
 const propertyDelimiterRE = /:(.+)/
-
+// 字符串形式转化为对象
 export function parseStringStyle(cssText: string): NormalizedStyle {
   const ret: NormalizedStyle = {}
   cssText.split(listDelimiterRE).forEach(item => {
@@ -55,7 +56,7 @@ export function stringifyStyle(styles: NormalizedStyle | undefined): string {
   }
   return ret
 }
-
+// 将对象形式或数组形式的 css 类名转化为字符串形式
 export function normalizeClass(value: unknown): string {
   let res = ''
   if (isString(value)) {

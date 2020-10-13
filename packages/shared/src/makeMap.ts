@@ -5,6 +5,7 @@
  * \/\*#\_\_PURE\_\_\*\/
  * So that rollup can tree-shake them if necessary.
  */
+// 高阶函数,返回传入字符是否在列表中
 export function makeMap(
   str: string,
   expectsLowerCase?: boolean
