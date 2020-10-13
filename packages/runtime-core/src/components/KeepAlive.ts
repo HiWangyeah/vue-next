@@ -37,6 +37,7 @@ import { ComponentRenderContext } from '../componentPublicInstance'
 
 type MatchPattern = string | RegExp | string[] | RegExp[]
 
+// KeepAlive 组件可用属性
 export interface KeepAliveProps {
   include?: MatchPattern
   exclude?: MatchPattern
