@@ -50,14 +50,19 @@ export const hydrate = ((...args) => {
   ensureHydrationRenderer().hydrate(...args)
 }) as RootHydrateFunction
 
+// Vue 必要方法
 export const createApp = ((...args) => {
+  // 调用 baseCreateRenderer 返回的对象中包含 createApp 方法
+  // createApp => createAppAPI
   const app = ensureRenderer().createApp(...args)
 
+  // 开发环境下,做必要的标签检查
   if (__DEV__) {
     injectNativeTagCheck(app)
   }
 
   const { mount } = app
+  // 重写实例的 mount 算法
   app.mount = (containerOrSelector: Element | string): any => {
     const container = normalizeContainer(containerOrSelector)
     if (!container) return

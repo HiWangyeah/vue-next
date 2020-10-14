@@ -16,6 +16,7 @@ import { RootHydrateFunction } from './hydration'
 import { devtoolsInitApp, devtoolsUnmountApp } from './devtools'
 import { version } from '.'
 
+// TODO: 深读 createApp
 export interface App<HostElement = any> {
   version: string
   config: AppConfig
@@ -129,7 +130,9 @@ export function createAppAPI<HostElement>(
       __DEV__ && warn(`root props passed to app.mount() must be an object.`)
       rootProps = null
     }
-
+    // 每新建一个 app 实例,都创建 context 对象
+    // 为 app 实例保存其注册的 component directive
+    // context 有一个 app 属性指向 app 实例
     const context = createAppContext()
     const installedPlugins = new Set()
 
@@ -155,7 +158,9 @@ export function createAppAPI<HostElement>(
           )
         }
       },
-
+      // 安装插件的方法
+      // 与 vue2 中不同,插件为实例安装,而不是全局安装
+      // 插件的定义形式与 vue2 中类似,依然需要是一个函数,或者是一个包含 install 方法的对象
       use(plugin: Plugin, ...options: any[]) {
         if (installedPlugins.has(plugin)) {
           __DEV__ && warn(`Plugin has already been applied to target app.`)
@@ -194,7 +199,7 @@ export function createAppAPI<HostElement>(
         }
         return app
       },
-
+      // component directive 方法都为实例方法,为实例注册组件或指令
       component(name: string, component?: Component): any {
         if (__DEV__) {
           validateComponentName(name, context.config)
