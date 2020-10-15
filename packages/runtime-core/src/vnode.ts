@@ -267,6 +267,8 @@ export function isSameVNodeType(n1: VNode, n2: VNode): boolean {
     // HMR only: if the component has been hot-updated, force a reload.
     return false
   }
+  // 判定 vnode 是否一致的标准 type 相等并且 key 相等
+  // 与 Vue 2 中 的 sameVnode 方法不同
   return n1.type === n2.type && n1.key === n2.key
 }
 
@@ -340,11 +342,14 @@ function _createVNode(
     return cloned
   }
 
+  // TODO:__vccOpts 保存的是否是已经经过编译优化过的组件方法?
   // class component normalization.
   if (isClassComponent(type)) {
     type = type.__vccOpts
   }
 
+  // 格式化 class 和 style
+  // class->字符串 style->对象
   // class & style normalization.
   if (props) {
     // for reactive or proxy objects, we need to clone it to enable mutation.

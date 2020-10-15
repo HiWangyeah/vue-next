@@ -230,7 +230,9 @@ export function createAppAPI<HostElement>(
       },
 
       mount(rootContainer: HostElement, isHydrate?: boolean): any {
+        // 避免多次 mount 相同组件
         if (!isMounted) {
+          // 创建 vnode
           const vnode = createVNode(
             rootComponent as ConcreteComponent,
             rootProps
@@ -249,6 +251,7 @@ export function createAppAPI<HostElement>(
           if (isHydrate && hydrate) {
             hydrate(vnode as VNode<Node, Element>, rootContainer as any)
           } else {
+            // render 调用 patch 方法
             render(vnode, rootContainer)
           }
           isMounted = true

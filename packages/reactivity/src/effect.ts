@@ -1,6 +1,9 @@
 import { TrackOpTypes, TriggerOpTypes } from './operations'
 import { EMPTY_OBJ, isArray, isIntegerKey, isMap } from '@vue/shared'
 
+// 使用 WeakMap 来保存 {target -> key ->dep} 之间的关系
+// 使用 Set 是为了减少内存开销
+// 为了方便理解,可以把依赖认为是一个维护了注册者的 Dep 类
 // The main WeakMap that stores {target -> key -> dep} connections.
 // Conceptually, it's easier to think of a dependency as a Dep class
 // which maintains a Set of subscribers, but we simply store them as
@@ -48,6 +51,7 @@ let activeEffect: ReactiveEffect | undefined
 export const ITERATE_KEY = Symbol(__DEV__ ? 'iterate' : '')
 export const MAP_KEY_ITERATE_KEY = Symbol(__DEV__ ? 'Map key iterate' : '')
 
+// 有 _isEffect 标记则为 effect
 export function isEffect(fn: any): fn is ReactiveEffect {
   return fn && fn._isEffect === true
 }
@@ -56,10 +60,12 @@ export function effect<T = any>(
   fn: () => T,
   options: ReactiveEffectOptions = EMPTY_OBJ
 ): ReactiveEffect<T> {
+  // 已经是 effect 方法,使用 raw 中保存的原始方法来重新创建
   if (isEffect(fn)) {
     fn = fn.raw
   }
   const effect = createReactiveEffect(fn, options)
+  // 没有 lazy 属性,先调用一次
   if (!options.lazy) {
     effect()
   }

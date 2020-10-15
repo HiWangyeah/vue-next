@@ -460,12 +460,14 @@ function baseCreateRenderer(
     optimized = false
   ) => {
     // patching & not same type, unmount old tree
+    // 类型不一致,移除老树
     if (n1 && !isSameVNodeType(n1, n2)) {
       anchor = getNextHostNode(n1)
       unmount(n1, parentComponent, parentSuspense, true)
       n1 = null
     }
 
+    // 是否开启优化模式
     if (n2.patchFlag === PatchFlags.BAIL) {
       optimized = false
       n2.dynamicChildren = null
@@ -473,6 +475,8 @@ function baseCreateRenderer(
 
     const { type, ref, shapeFlag } = n2
     switch (type) {
+      // 对 text comment static fragment 类型节点的操作
+      // 依赖于宿主环境
       case Text:
         processText(n1, n2, container, anchor)
         break
@@ -556,8 +560,10 @@ function baseCreateRenderer(
     }
   }
 
+  // text 节点操作
   const processText: ProcessTextOrCommentFn = (n1, n2, container, anchor) => {
     if (n1 == null) {
+      // 老节点为空,直接插入新节点
       hostInsert(
         (n2.el = hostCreateText(n2.children as string)),
         container,
@@ -874,6 +880,7 @@ function baseCreateRenderer(
     optimized: boolean
   ) => {
     const el = (n2.el = n1.el!)
+    // TODO:通过位运算计算 patchFlag
     let { patchFlag, dynamicChildren, dirs } = n2
     // #1426 take the old vnode's patch flag into account since user may clone a
     // compiler-generated vnode, which de-opts to FULL_PROPS

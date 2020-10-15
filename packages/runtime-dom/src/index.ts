@@ -51,12 +51,23 @@ export const hydrate = ((...args) => {
 }) as RootHydrateFunction
 
 // Vue 必要方法
+// demo
+// const Counter = {
+//   data() {
+//     return {
+//       counter: 0
+//     }
+//   }
+// }
+
+// Vue.createApp(Counter)
 export const createApp = ((...args) => {
   // 调用 baseCreateRenderer 返回的对象中包含 createApp 方法
   // createApp => createAppAPI
   const app = ensureRenderer().createApp(...args)
 
   // 开发环境下,做必要的标签检查
+  // 以防自定义组件名称与 html 或 svg 重名
   if (__DEV__) {
     injectNativeTagCheck(app)
   }
@@ -66,13 +77,17 @@ export const createApp = ((...args) => {
   app.mount = (containerOrSelector: Element | string): any => {
     const container = normalizeContainer(containerOrSelector)
     if (!container) return
+    // component 即调用 createApp 方法时传入的组件
     const component = app._component
     if (!isFunction(component) && !component.render && !component.template) {
       component.template = container.innerHTML
     }
     // clear content before mounting
     container.innerHTML = ''
+    // mount 方法创建 vnode,并将 vnode 生成的 dom 渲染到 container
     const proxy = mount(container)
+    // 绑定 dom 后移除 v-cloak
+    // v-cloak 可以用于判断 Vue 组件是否渲染完毕
     container.removeAttribute('v-cloak')
     container.setAttribute('data-v-app', '')
     return proxy
@@ -107,7 +122,7 @@ function injectNativeTagCheck(app: App) {
     writable: false
   })
 }
-
+// 传入字符串,则认为是选择器,返回选择器对应的 dom
 function normalizeContainer(container: Element | string): Element | null {
   if (isString(container)) {
     const res = document.querySelector(container)
